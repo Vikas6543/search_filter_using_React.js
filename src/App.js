@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
+export default function App() {
+  const [api, setApi] = useState([]);
+  const [initialValue, setInitialValue] = useState('');
+
+  const myData = async () => {
+    const result = await fetch(
+      'http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10'
+    );
+
+    const finalResult = await result.json();
+    setApi(finalResult);
+  };
+
+  const onChangeHandler = (e) => {
+    setInitialValue(e.target.value);
+  };
+
+  useEffect(() => {
+    myData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <form>
+        <input
+          type='text'
+          onChange={onChangeHandler}
+          value={initialValue}
+          placeholder='Search...'
+        />
+      </form>
+      <div className='mainContent'>
+        {api
+          .filter((ele) => {
+            return ele.title.toLowerCase().includes(initialValue.toLowerCase());
+          })
+          .map((item) => (
+            <div key={item.id} className='imageWrapper'>
+              <img src={item.url} alt='pic' />
+              <h2>{item.title}</h2>
+            </div>
+          ))}
+      </div>
+    </>
   );
 }
-
-export default App;
