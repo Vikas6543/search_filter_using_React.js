@@ -7,7 +7,8 @@ export default function App() {
 
   const myData = async () => {
     const result = await fetch(
-      'http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10'
+      "https://jsonplaceholder.typicode.com/posts"
+//       'http://jsonplaceholder.typicode.com/photos?_start=0&_limit=10'
     );
 
     const finalResult = await result.json();
